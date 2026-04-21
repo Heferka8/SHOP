@@ -1,0 +1,1039 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LUXE SHOP</title>
+
+<!-- ====================================================
+     GOOGLE TAG MANAGER
+     🔧 Замени GTM-XXXXXXX на свой Container ID
+     Найти: GTM → Admin → Container ID
+     ==================================================== -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-XXXXXXX');</script>
+<!-- End GTM head -->
+
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0d0d;
+    --surface: #141414;
+    --card: #1a1a1a;
+    --border: #2a2a2a;
+    --accent: #c9a96e;
+    --accent-light: #e8c98a;
+    --text: #f0ede8;
+    --muted: #888;
+    --danger: #e05555;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Jost', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* HEADER */
+  header {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 1000;
+    background: rgba(13,13,13,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 40px;
+    height: 68px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 26px;
+    font-weight: 300;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    color: var(--accent);
+    cursor: pointer;
+  }
+
+  .cart-btn {
+    position: relative;
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 10px 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Jost', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: all 0.25s;
+    border-radius: 2px;
+  }
+
+  .cart-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .cart-badge {
+    background: var(--accent);
+    color: #000;
+    font-size: 11px;
+    font-weight: 700;
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s;
+  }
+
+  .cart-badge.bump {
+    animation: bump 0.3s ease;
+  }
+
+  @keyframes bump {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.5); }
+    100% { transform: scale(1); }
+  }
+
+  /* PAGES */
+  .page {
+    display: none;
+    padding-top: 68px;
+    min-height: 100vh;
+  }
+  .page.active { display: block; }
+
+  /* CATALOG */
+  .hero {
+    padding: 80px 40px 60px;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .hero-label {
+    font-size: 11px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 20px;
+  }
+
+  .hero h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(48px, 6vw, 80px);
+    font-weight: 300;
+    line-height: 1.05;
+    margin-bottom: 20px;
+  }
+
+  .hero p {
+    color: var(--muted);
+    font-size: 15px;
+    font-weight: 300;
+    max-width: 500px;
+    margin: 0 auto;
+    line-height: 1.7;
+  }
+
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    margin: 0;
+  }
+
+  .product-card {
+    background: var(--card);
+    cursor: pointer;
+    transition: background 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .product-card:hover { background: #202020; }
+
+  .product-card:hover .card-img-wrap::after {
+    opacity: 1;
+  }
+
+  .card-img-wrap {
+    position: relative;
+    aspect-ratio: 4/3;
+    overflow: hidden;
+  }
+
+  .card-img-wrap::after {
+    content: 'Подробнее →';
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 80px;
+    transition: transform 0.4s ease;
+  }
+
+  .product-card:hover .card-img {
+    transform: scale(1.05);
+  }
+
+  .card-body {
+    padding: 24px;
+    border-top: 1px solid var(--border);
+  }
+
+  .card-cat {
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+
+  .card-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 400;
+    margin-bottom: 8px;
+    line-height: 1.2;
+  }
+
+  .card-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.6;
+    margin-bottom: 20px;
+    font-weight: 300;
+  }
+
+  .card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .price {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--accent);
+  }
+
+  .add-btn {
+    flex: 1;
+    background: transparent;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    padding: 10px;
+    font-family: 'Jost', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+    border-radius: 2px;
+  }
+
+  .add-btn:hover {
+    background: var(--accent);
+    color: #000;
+  }
+
+  .add-btn.added {
+    background: var(--accent);
+    color: #000;
+  }
+
+  /* PRODUCT DETAIL */
+  .detail-back {
+    padding: 30px 40px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--muted);
+    cursor: pointer;
+    font-size: 13px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: color 0.2s;
+    width: fit-content;
+  }
+
+  .detail-back:hover { color: var(--accent); }
+
+  .detail-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    min-height: calc(100vh - 130px);
+  }
+
+  .detail-img-side {
+    position: relative;
+    background: var(--card);
+    border-right: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 180px;
+    min-height: 500px;
+  }
+
+  .detail-info-side {
+    padding: 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .detail-cat {
+    font-size: 11px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 16px;
+  }
+
+  .detail-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(36px, 4vw, 52px);
+    font-weight: 300;
+    line-height: 1.1;
+    margin-bottom: 24px;
+  }
+
+  .detail-price {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 40px;
+    font-weight: 600;
+    color: var(--accent);
+    margin-bottom: 32px;
+  }
+
+  .detail-divider {
+    height: 1px;
+    background: var(--border);
+    margin-bottom: 32px;
+  }
+
+  .detail-desc {
+    font-size: 15px;
+    font-weight: 300;
+    line-height: 1.8;
+    color: #bbb;
+    margin-bottom: 40px;
+  }
+
+  .detail-features {
+    list-style: none;
+    margin-bottom: 40px;
+  }
+
+  .detail-features li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 14px;
+    color: var(--muted);
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    font-weight: 300;
+  }
+
+  .detail-features li span.dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    flex-shrink: 0;
+  }
+
+  .detail-add-btn {
+    width: 100%;
+    padding: 18px;
+    background: var(--accent);
+    border: none;
+    color: #000;
+    font-family: 'Jost', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.25s;
+    border-radius: 2px;
+  }
+
+  .detail-add-btn:hover {
+    background: var(--accent-light);
+    transform: translateY(-1px);
+    box-shadow: 0 8px 30px rgba(201,169,110,0.3);
+  }
+
+  .detail-add-btn.added {
+    background: #2a6644;
+    color: #fff;
+    letter-spacing: 2px;
+  }
+
+  /* CART SIDEBAR */
+  .cart-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    z-index: 2000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+  }
+
+  .cart-overlay.open {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  .cart-drawer {
+    position: fixed;
+    top: 0; right: 0; bottom: 0;
+    width: 420px;
+    background: var(--surface);
+    border-left: 1px solid var(--border);
+    z-index: 2001;
+    transform: translateX(100%);
+    transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .cart-drawer.open {
+    transform: translateX(0);
+  }
+
+  .cart-header {
+    padding: 24px 28px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .cart-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 26px;
+    font-weight: 300;
+    letter-spacing: 2px;
+  }
+
+  .cart-close {
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-size: 24px;
+    cursor: pointer;
+    transition: color 0.2s;
+    padding: 4px;
+    line-height: 1;
+  }
+
+  .cart-close:hover { color: var(--text); }
+
+  .cart-items {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px 28px;
+  }
+
+  .cart-items::-webkit-scrollbar { width: 4px; }
+  .cart-items::-webkit-scrollbar-track { background: transparent; }
+  .cart-items::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+  .cart-empty {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--muted);
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 2;
+  }
+
+  .cart-empty .empty-icon {
+    font-size: 48px;
+    display: block;
+    margin-bottom: 16px;
+    opacity: 0.4;
+  }
+
+  .cart-item {
+    display: flex;
+    gap: 16px;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--border);
+    animation: slideIn 0.3s ease;
+  }
+
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateX(20px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  .cart-item-emoji {
+    font-size: 40px;
+    width: 60px; height: 60px;
+    background: var(--card);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    flex-shrink: 0;
+  }
+
+  .cart-item-info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .cart-item-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    font-weight: 400;
+    margin-bottom: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .cart-item-price {
+    font-size: 14px;
+    color: var(--accent);
+    margin-bottom: 10px;
+    font-weight: 500;
+  }
+
+  .qty-controls {
+    display: flex;
+    align-items: center;
+    gap: 0;
+  }
+
+  .qty-btn {
+    width: 28px; height: 28px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    color: var(--text);
+    cursor: pointer;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+    line-height: 1;
+  }
+
+  .qty-btn:hover {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #000;
+  }
+
+  .qty-num {
+    width: 36px; height: 28px;
+    background: var(--bg);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  .cart-item-remove {
+    background: none;
+    border: none;
+    color: var(--muted);
+    cursor: pointer;
+    font-size: 18px;
+    padding: 4px;
+    transition: color 0.2s;
+    align-self: flex-start;
+  }
+
+  .cart-item-remove:hover { color: var(--danger); }
+
+  .cart-footer {
+    padding: 24px 28px;
+    border-top: 1px solid var(--border);
+  }
+
+  .cart-total-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+
+  .cart-total-label {
+    font-size: 12px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .cart-total-value {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 32px;
+    font-weight: 600;
+    color: var(--accent);
+  }
+
+  .checkout-btn {
+    width: 100%;
+    padding: 18px;
+    background: var(--accent);
+    border: none;
+    color: #000;
+    font-family: 'Jost', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.25s;
+    border-radius: 2px;
+    margin-bottom: 12px;
+  }
+
+  .checkout-btn:hover {
+    background: var(--accent-light);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(201,169,110,0.35);
+  }
+
+  .checkout-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+
+  .tgm-info {
+    font-size: 11px;
+    color: var(--muted);
+    text-align: center;
+    letter-spacing: 0.5px;
+  }
+
+  /* THANK YOU */
+  .thankyou-page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: calc(100vh - 68px);
+    text-align: center;
+    padding: 40px;
+  }
+
+  .thankyou-content {
+    max-width: 500px;
+  }
+
+  .thankyou-icon {
+    font-size: 80px;
+    margin-bottom: 32px;
+    animation: floatIn 0.6s ease;
+  }
+
+  @keyframes floatIn {
+    from { transform: scale(0) rotate(-20deg); opacity: 0; }
+    to { transform: scale(1) rotate(0); opacity: 1; }
+  }
+
+  .thankyou-content h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 48px;
+    font-weight: 300;
+    margin-bottom: 16px;
+    color: var(--accent);
+  }
+
+  .thankyou-content p {
+    font-size: 15px;
+    color: var(--muted);
+    font-weight: 300;
+    line-height: 1.8;
+    margin-bottom: 40px;
+  }
+
+  .back-catalog-btn {
+    background: none;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    padding: 14px 40px;
+    font-family: 'Jost', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.25s;
+    border-radius: 2px;
+  }
+
+  .back-catalog-btn:hover {
+    background: var(--accent);
+    color: #000;
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    header { padding: 0 20px; }
+    .hero { padding: 50px 20px 40px; }
+    .products-grid { grid-template-columns: 1fr 1fr; }
+    .detail-layout { grid-template-columns: 1fr; }
+    .detail-img-side { min-height: 260px; font-size: 100px; }
+    .detail-info-side { padding: 30px 20px; }
+    .cart-drawer { width: 100%; }
+    .detail-back { padding: 20px 20px 0; }
+  }
+
+  @media (max-width: 500px) {
+    .products-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- GTM noscript (обязательно сразу после <body>) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-XXXXXXX"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End GTM noscript -->
+
+<header>
+  <div class="logo" onclick="showPage('catalog')">LUXE</div>
+  <button class="cart-btn" onclick="toggleCart()">
+    <span>🛒</span>
+    <span>Корзина</span>
+    <span class="cart-badge" id="cart-badge">0</span>
+  </button>
+</header>
+
+<!-- CATALOG PAGE -->
+<div class="page active" id="page-catalog">
+  <div class="hero">
+    <p class="hero-label">Новая коллекция · 2025</p>
+    <h1>Избранные<br>предметы</h1>
+    <p>Четыре уникальных товара, отобранных с особым вниманием к качеству и стилю.</p>
+  </div>
+  <div class="products-grid" id="products-grid"></div>
+</div>
+
+<!-- PRODUCT DETAIL PAGE -->
+<div class="page" id="page-detail">
+  <div class="detail-back" onclick="showPage('catalog')">← Назад в каталог</div>
+  <div class="detail-layout">
+    <div class="detail-img-side" id="detail-img"></div>
+    <div class="detail-info-side">
+      <p class="detail-cat" id="detail-cat"></p>
+      <h2 class="detail-title" id="detail-title"></h2>
+      <p class="detail-price" id="detail-price"></p>
+      <div class="detail-divider"></div>
+      <p class="detail-desc" id="detail-desc"></p>
+      <ul class="detail-features" id="detail-features"></ul>
+      <button class="detail-add-btn" id="detail-add-btn" onclick="addFromDetail()">
+        Добавить в корзину
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- THANK YOU PAGE -->
+<div class="page" id="page-thankyou">
+  <div class="thankyou-page">
+    <div class="thankyou-content">
+      <div class="thankyou-icon">✅</div>
+      <h2>Спасибо за заказ!</h2>
+      <p>Ваш заказ принят. Наш менеджер свяжется с вами в ближайшее время через Telegram для подтверждения деталей доставки.</p>
+      <button class="back-catalog-btn" onclick="showPage('catalog')">Продолжить покупки</button>
+    </div>
+  </div>
+</div>
+
+<!-- CART OVERLAY -->
+<div class="cart-overlay" id="cart-overlay" onclick="toggleCart()"></div>
+
+<!-- CART DRAWER -->
+<div class="cart-drawer" id="cart-drawer">
+  <div class="cart-header">
+    <div class="cart-title">Корзина</div>
+    <button class="cart-close" onclick="toggleCart()">✕</button>
+  </div>
+  <div class="cart-items" id="cart-items-list"></div>
+  <div class="cart-footer">
+    <div class="cart-total-row">
+      <span class="cart-total-label">Итого</span>
+      <span class="cart-total-value" id="cart-total">0 ₴</span>
+    </div>
+    <button class="checkout-btn" id="checkout-btn" onclick="sendToTelegram()" disabled>
+      Оформить заказ
+    </button>
+    <p class="tgm-info">Заказ будет отправлен через Telegram</p>
+  </div>
+</div>
+
+<script>
+  // ========================
+  // ТОВАРЫ
+  // ========================
+  const products = [
+    {
+      id: 1,
+      emoji: '⌚',
+      category: 'Аксессуары',
+      name: 'Хронограф N°1',
+      shortDesc: 'Механические часы ручной сборки с сапфировым стеклом.',
+      fullDesc: 'Механический хронограф с автоматическим подзаводом. Корпус из нержавеющей стали 316L, сапфировое антибликовое стекло. Водостойкость 50 м. Ремешок из натуральной итальянской кожи с быстросъёмным механизмом.',
+      price: 4200,
+      features: ['Механизм: ETA 7750 Valjoux', 'Сапфировое стекло', 'Корпус 42 мм', 'Водозащита 50 м', 'Гарантия 2 года'],
+    },
+    {
+      id: 2,
+      emoji: '👜',
+      category: 'Кожгалантерея',
+      name: 'Портфель Atelier',
+      shortDesc: 'Портфель из зернистой кожи с латунной фурнитурой.',
+      fullDesc: 'Портфель ручной работы из полнозернистой кожи растительного дубления. Внутренняя отделка из замши, три основных отсека, внешний карман на молнии. Фурнитура из состаренной латуни. Поставляется в подарочной коробке.',
+      price: 3600,
+      features: ['Кожа растительного дубления', 'Латунная фурнитура', 'Три внутренних отсека', 'Подарочная упаковка', 'Ручное прошивание'],
+    },
+    {
+      id: 3,
+      emoji: '🕯️',
+      category: 'Ароматика',
+      name: 'Свеча Noir Absolu',
+      shortDesc: 'Ароматическая соевая свеча с нотами уда и кашемира.',
+      fullDesc: 'Изысканная ароматическая свеча на основе натурального соевого воска. Сложная парфюмерная композиция: верхние ноты бергамота и чёрного перца, сердечные — уд и роза, шлейф — кашемир и мускус. Время горения 55–60 часов.',
+      price: 890,
+      features: ['Натуральный соевый воск', '55–60 часов горения', 'Хлопковый фитиль', 'Объём 220 мл', 'Сделано во Франции'],
+    },
+    {
+      id: 4,
+      emoji: '💎',
+      category: 'Ювелирные изделия',
+      name: 'Кольцо Éternité',
+      shortDesc: 'Золотое кольцо с бриллиантовой дорожкой.',
+      fullDesc: 'Кольцо из жёлтого золота 585 пробы с бриллиантами круглой огранки. Суммарный карат — 0.45 ct, чистота VS1, цвет G. Дизайн «дорожка» с закрепкой типа «крапан». Поставляется с сертификатом подлинности и паспортом изделия.',
+      price: 18500,
+      features: ['Золото 585 пробы', 'Бриллианты 0.45 ct', 'Чистота VS1, цвет G', 'Сертификат GIA', 'Индивидуальная гравировка'],
+    }
+  ];
+
+  // ========================
+  // STATE
+  // ========================
+  let cart = [];
+  let currentDetailId = null;
+
+  // ========================
+  // RENDER CATALOG
+  // ========================
+  function renderCatalog() {
+    const grid = document.getElementById('products-grid');
+    grid.innerHTML = products.map(p => {
+      const inCart = cart.find(i => i.id === p.id);
+      return `
+        <div class="product-card" onclick="openDetail(${p.id})">
+          <div class="card-img-wrap">
+            <div class="card-img">${p.emoji}</div>
+          </div>
+          <div class="card-body">
+            <p class="card-cat">${p.category}</p>
+            <h3 class="card-name">${p.name}</h3>
+            <p class="card-desc">${p.shortDesc}</p>
+            <div class="card-footer">
+              <span class="price">${p.price.toLocaleString('ru')} ₴</span>
+              <button class="add-btn ${inCart ? 'added' : ''}" onclick="event.stopPropagation(); addToCart(${p.id})">
+                ${inCart ? '✓ В корзине' : '+ В корзину'}
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  // ========================
+  // DETAIL PAGE
+  // ========================
+  function openDetail(id) {
+    currentDetailId = id;
+    const p = products.find(x => x.id === id);
+    document.getElementById('detail-img').textContent = p.emoji;
+    document.getElementById('detail-cat').textContent = p.category;
+    document.getElementById('detail-title').textContent = p.name;
+    document.getElementById('detail-price').textContent = p.price.toLocaleString('ru') + ' ₴';
+    document.getElementById('detail-desc').textContent = p.fullDesc;
+    document.getElementById('detail-features').innerHTML = p.features.map(f =>
+      `<li><span class="dot"></span>${f}</li>`
+    ).join('');
+    updateDetailBtn();
+    showPage('detail');
+    window.scrollTo(0, 0);
+  }
+
+  function updateDetailBtn() {
+    const btn = document.getElementById('detail-add-btn');
+    const inCart = cart.find(i => i.id === currentDetailId);
+    if (inCart) {
+      btn.textContent = '✓ Уже в корзине';
+      btn.classList.add('added');
+    } else {
+      btn.textContent = 'Добавить в корзину';
+      btn.classList.remove('added');
+    }
+  }
+
+  function addFromDetail() {
+    addToCart(currentDetailId);
+    updateDetailBtn();
+  }
+
+  // ========================
+  // CART LOGIC
+  // ========================
+  function addToCart(id) {
+    const exists = cart.find(i => i.id === id);
+    if (exists) {
+      exists.qty += 1;
+    } else {
+      const p = products.find(x => x.id === id);
+      cart.push({ id: p.id, name: p.name, price: p.price, emoji: p.emoji, category: p.category, qty: 1 });
+    }
+    updateCartUI();
+    renderCatalog();
+    const badge = document.getElementById('cart-badge');
+    badge.classList.remove('bump');
+    void badge.offsetWidth;
+    badge.classList.add('bump');
+  }
+
+  function removeFromCart(id) {
+    cart = cart.filter(i => i.id !== id);
+    updateCartUI();
+    renderCatalog();
+    if (currentDetailId === id) updateDetailBtn();
+  }
+
+  function changeQty(id, delta) {
+    const item = cart.find(i => i.id === id);
+    if (!item) return;
+    item.qty += delta;
+    if (item.qty <= 0) removeFromCart(id);
+    else updateCartUI();
+  }
+
+  function updateCartUI() {
+    const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
+    const count = cart.reduce((s, i) => s + i.qty, 0);
+
+    document.getElementById('cart-badge').textContent = count;
+
+    const list = document.getElementById('cart-items-list');
+    if (cart.length === 0) {
+      list.innerHTML = `
+        <div class="cart-empty">
+          <span class="empty-icon">🛒</span>
+          Ваша корзина пуста.<br>Добавьте товары из каталога.
+        </div>
+      `;
+    } else {
+      list.innerHTML = cart.map(item => `
+        <div class="cart-item">
+          <div class="cart-item-emoji">${item.emoji}</div>
+          <div class="cart-item-info">
+            <div class="cart-item-name">${item.name}</div>
+            <div class="cart-item-price">${(item.price * item.qty).toLocaleString('ru')} ₴</div>
+            <div class="qty-controls">
+              <button class="qty-btn" onclick="changeQty(${item.id}, -1)">−</button>
+              <div class="qty-num">${item.qty}</div>
+              <button class="qty-btn" onclick="changeQty(${item.id}, 1)">+</button>
+            </div>
+          </div>
+          <button class="cart-item-remove" onclick="removeFromCart(${item.id})">✕</button>
+        </div>
+      `).join('');
+    }
+
+    document.getElementById('cart-total').textContent = total.toLocaleString('ru') + ' ₴';
+    document.getElementById('checkout-btn').disabled = cart.length === 0;
+  }
+
+  function toggleCart() {
+    document.getElementById('cart-overlay').classList.toggle('open');
+    document.getElementById('cart-drawer').classList.toggle('open');
+  }
+
+  // ========================
+  // CHECKOUT
+  // ========================
+  function sendToTelegram() {
+    if (cart.length === 0) return;
+    cart = [];
+    updateCartUI();
+    renderCatalog();
+    toggleCart();
+    showPage('thankyou');
+  }
+
+  // ========================
+  // PAGE ROUTING
+  // ========================
+  function showPage(name) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById('page-' + name).classList.add('active');
+    window.scrollTo(0, 0);
+  }
+
+  // ========================
+  // INIT
+  // ========================
+  renderCatalog();
+  updateCartUI();
+</script>
+</body>
+</html>
