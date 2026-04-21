@@ -5,14 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>LUXE SHOP</title>
 
-<!-- Google Tag Manager -->
-<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-P2ZLWGMV');</script>
-<!-- End Google Tag Manager -->
-     
+<!-- ====================================================
+     GOOGLE TAG MANAGER
+     🔧 Замени GTM-XXXXXXX на свой Container ID
+     Найти: GTM → Admin → Container ID
+     ==================================================== -->
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
 j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
@@ -723,6 +720,97 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     color: #000;
   }
 
+
+  /* HOME PAGE */
+  .home-wrap {
+    min-height: calc(100vh - 68px);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    position: relative;
+    overflow: hidden;
+  }
+  .home-bg {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 70% 50%, rgba(201,169,110,0.07) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .home-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 80px 60px;
+    z-index: 1;
+  }
+  .home-label {
+    font-size: 11px;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 32px;
+  }
+  .home-title {
+    font-family: "Cormorant Garamond", serif;
+    font-size: clamp(60px, 7vw, 100px);
+    font-weight: 300;
+    line-height: 1.0;
+    margin-bottom: 32px;
+  }
+  .home-sub {
+    font-size: 15px;
+    font-weight: 300;
+    color: var(--muted);
+    line-height: 1.8;
+    margin-bottom: 48px;
+    max-width: 340px;
+  }
+  .home-cta {
+    display: inline-flex;
+    align-items: center;
+    background: var(--accent);
+    border: none;
+    color: #000;
+    padding: 18px 40px;
+    font-family: "Jost", sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.25s;
+    border-radius: 2px;
+    width: fit-content;
+  }
+  .home-cta:hover {
+    background: var(--accent-light);
+    transform: translateX(6px);
+    box-shadow: 0 10px 40px rgba(201,169,110,0.3);
+  }
+  .home-deco {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+    padding: 80px 40px;
+    border-left: 1px solid var(--border);
+  }
+  .home-deco span {
+    font-size: 80px;
+    opacity: 0.85;
+    display: block;
+    animation: floatEmoji 3s ease-in-out infinite;
+  }
+  .home-deco span:nth-child(1){animation-delay:0s}
+  .home-deco span:nth-child(2){animation-delay:0.75s}
+  .home-deco span:nth-child(3){animation-delay:1.5s}
+  .home-deco span:nth-child(4){animation-delay:2.25s}
+  @keyframes floatEmoji {
+    0%,100%{transform:translateY(0);opacity:0.7}
+    50%{transform:translateY(-12px);opacity:1}
+  }
+  .home-deco span:hover { transform: scale(1.2) !important; opacity: 1; }
+
   /* RESPONSIVE */
   @media (max-width: 768px) {
     header { padding: 0 20px; }
@@ -733,6 +821,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     .detail-info-side { padding: 30px 20px; }
     .cart-drawer { width: 100%; }
     .detail-back { padding: 20px 20px 0; }
+    .home-wrap { grid-template-columns: 1fr; }
+    .home-deco { display: none; }
+    .home-content { padding: 50px 20px; }
+
   }
 
   @media (max-width: 500px) {
@@ -742,13 +834,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </head>
 <body>
 
-<!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-P2ZLWGMV"
+<!-- GTM noscript (обязательно сразу после <body>) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-XXXXXXX"
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<!-- End Google Tag Manager (noscript) -->
+<!-- End GTM noscript -->
 
 <header>
-  <div class="logo" onclick="showPage('catalog')">LUXE</div>
+  <div class="logo" onclick="showPage('home')">LUXE</div>
   <button class="cart-btn" onclick="toggleCart()">
     <span>🛒</span>
     <span>Корзина</span>
@@ -756,8 +848,22 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </button>
 </header>
 
+<!-- HOME PAGE -->
+<div class="page active" id="page-home">
+  <div class="home-wrap">
+    <div class="home-bg"></div>
+    <div class="home-content">
+      <p class="home-label">Коллекция · 2025</p>
+      <h1 class="home-title">Вещи,<br>которые<br>остаются.</h1>
+      <p class="home-sub">Четыре предмета. Безупречное качество.<br>Ничего лишнего.</p>
+      <button class="home-cta" onclick="showPage('catalog')">Перейти в каталог →</button>
+    </div>
+    <div class="home-deco"><span>⌚</span><span>👜</span><span>🕯️</span><span>💎</span></div>
+  </div>
+</div>
+
 <!-- CATALOG PAGE -->
-<div class="page active" id="page-catalog">
+<div class="page" id="page-catalog">
   <div class="hero">
     <p class="hero-label">Новая коллекция · 2025</p>
     <h1>Избранные<br>предметы</h1>
